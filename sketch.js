@@ -3,6 +3,7 @@
 let dino;
 let obstacles = [];
 let groundY = 300;
+let cont = 0;
 
 let video;
 let classifier;
@@ -41,16 +42,28 @@ function gotResults(error, results) {
 
 
 function setup() {
+  video = createCapture(VIDEO);
+  video.hide();
+
   createCanvas(800, 400);
   // Se crea el dino pasándole la posición del suelo
   dino = new Dino(groundY);
   // Se agrega el primer obstáculo
   obstacles.push(new Obstacle(groundY));
+
+  setInterval(classifyVideo, 500);
 }
 
 function draw() {
+
+
   background(220);
 
+  textSize(30);
+  textAlign(LEFT, TOP); 
+  fill(0); 
+  text("Puntaje: " + cont, 10, 10);
+  
   // Actualizar y dibujar al dinosaurio
   dino.update();
   dino.show();
@@ -68,6 +81,7 @@ function draw() {
     // Si hay colisión, detener el juego
     if (obstacles[i].hits(dino)) {
       console.log("Game Over");
+      console.log("Puntaje: " + cont)
       noLoop();
     }
 
@@ -85,6 +99,7 @@ function draw() {
 function keyPressed() {
   // Permite saltar con la tecla de espacio o la flecha arriba
   if (key === ' ' || keyCode === UP_ARROW) {
+    cont = cont+1
     dino.jump();
   }
 }

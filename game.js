@@ -1,5 +1,13 @@
 // game.js
 
+let dinoImg; 
+let three; 
+
+function preload() {
+  dinoImg = loadImage('/resource/dino.png');
+  three = loadImage('/resource/arbol.png')
+}
+
 class Dino {
     constructor(groundY) {
       this.r = 50;
@@ -29,8 +37,8 @@ class Dino {
     }
     
     show() {
-      fill(50);
-      rect(this.x, this.y, this.r, this.r);
+      image(dinoImg, this.x, this.y, this.r, this.r); 
+
     }
   }
   
@@ -53,8 +61,8 @@ class Dino {
     }
     
     show() {
-      fill(255, 0, 0);
-      rect(this.x, this.y, this.w, this.h);
+      image(three, this.x, this.y, this.w, this.h); 
+
     }
     
     hits(dino) {
