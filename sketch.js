@@ -4,6 +4,8 @@ let dino;
 let obstacles = [];
 let groundY = 300;
 let cont = 0;
+let dinoImg; 
+let three; 
 
 let video;
 let classifier;
@@ -15,12 +17,18 @@ let UP = 'saltar'
 let NULL = 'nada'
 
 
-function preload(){
+function preload() {
   classifier = ml5.imageClassifier(modelLoaded);
+  dinoImg = loadImage('/resource/dino.png');
+  three = loadImage('/resource/arbol.png')
 }
 
 function classifyVideo() {
-  classifier.classify(video, gotResults);
+  if (classifier) {
+    classifier.classify(video, gotResults);
+  } else {
+    console.error("El clasificador no está inicializado.");
+  }
 }
 
 function gotResults(error, results) {
@@ -33,11 +41,9 @@ function gotResults(error, results) {
   console.log(results[0].label);
 
   label = results[0].label; 
-  if (label !== results[0].label) {
-    console.logu("Mostrar cambios")
-    label = results[0].label;  
+    console.log("Mostrar cambios")
     keyPressed();  
-  }
+  
 }
 
 
@@ -45,13 +51,18 @@ function setup() {
   video = createCapture(VIDEO);
   video.hide();
 
+  setInterval(classifyVideo, 500);
+  setTimeout(2000);
+
   createCanvas(800, 400);
   // Se crea el dino pasándole la posición del suelo
-  dino = new Dino(groundY);
+  dino = new Dino(groundY, dinoImg);
   // Se agrega el primer obstáculo
   obstacles.push(new Obstacle(groundY));
+  
 
-  setInterval(classifyVideo, 500);
+
+
 }
 
 function draw() {
@@ -63,7 +74,7 @@ function draw() {
   textAlign(LEFT, TOP); 
   fill(0); 
   text("Puntaje: " + cont, 10, 10);
-  
+
   // Actualizar y dibujar al dinosaurio
   dino.update();
   dino.show();
@@ -80,8 +91,11 @@ function draw() {
 
     // Si hay colisión, detener el juego
     if (obstacles[i].hits(dino)) {
-      console.log("Game Over");
-      console.log("Puntaje: " + cont)
+      background(255, 0, 0);
+      textSize(30);
+      textAlign(CENTER, CENTER); 
+      fill(0);
+      text("Haz perdido\nTu puntaje es: " + cont, width / 2, height / 2);
       noLoop();
     }
 
@@ -98,7 +112,7 @@ function draw() {
 
 function keyPressed() {
   // Permite saltar con la tecla de espacio o la flecha arriba
-  if (key === ' ' || keyCode === UP_ARROW) {
+  if (label === 'saltar' ) {
     cont = cont+1
     dino.jump();
   }

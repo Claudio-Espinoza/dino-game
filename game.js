@@ -1,21 +1,15 @@
 // game.js
 
-let dinoImg; 
-let three; 
-
-function preload() {
-  dinoImg = loadImage('/resource/dino.png');
-  three = loadImage('/resource/arbol.png')
-}
 
 class Dino {
-    constructor(groundY) {
+    constructor(groundY, img) {
       this.r = 50;
       this.x = 50;
       this.groundY = groundY;
       this.y = groundY - this.r;
       this.vy = 0;
       this.gravity = 2;
+      this.img = img
     }
     
     jump() {
@@ -37,7 +31,7 @@ class Dino {
     }
     
     show() {
-      image(dinoImg, this.x, this.y, this.r, this.r); 
+      image(this.img, this.x, this.y, this.r, this.r); 
 
     }
   }
