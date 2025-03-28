@@ -4,6 +4,42 @@ let dino;
 let obstacles = [];
 let groundY = 300;
 
+let video;
+let classifier;
+let modelLoaded = 'https://teachablemachine.withgoogle.com/models/ARudLa_JM/';
+let label = 'esperando...';
+
+// Constantes
+let UP = 'saltar'
+let NULL = 'nada'
+
+
+function preload(){
+  classifier = ml5.imageClassifier(modelLoaded);
+}
+
+function classifyVideo() {
+  classifier.classify(video, gotResults);
+}
+
+function gotResults(error, results) {
+  if (error) {
+    console.error(error);
+    return;
+  }
+
+  console.log(results);
+  console.log(results[0].label);
+
+  label = results[0].label; 
+  if (label !== results[0].label) {
+    console.logu("Mostrar cambios")
+    label = results[0].label;  
+    keyPressed();  
+  }
+}
+
+
 function setup() {
   createCanvas(800, 400);
   // Se crea el dino pasándole la posición del suelo
